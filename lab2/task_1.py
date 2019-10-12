@@ -14,7 +14,19 @@ def counting_sort(values, _max, _min=0):
     :type _min: int
     :return:
     """
-    pass
+    compartment = list(range(_min,_max))
+    count = []
+    sort = []
+    for i in compartment:
+        count.append(0)
+    for ii in values:
+        count[ii]+=1   
+    for iii in range(len(count)):
+        if count[iii]!=0:
+            for u in range(count[iii]):
+                sort.append(iii)
+    print(sort)               
+    return sort
 
 
 if __name__ == '__main__':
