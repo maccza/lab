@@ -8,8 +8,19 @@ def count_letters(msg):
     :return: Most frequent pair char - count in message.
     :rtype: list
     """
-    pass
+    msg_ = []
+    count = []
+    
+    for i in msg:
+        msg_.append(ord(i))
 
+    compartment = list(range(0,max(msg_)+1))
+    for i in compartment:
+        count.append(0)
+    for ii in msg_:
+        count[ii]+=1
+    max_char = count.index(max(count))           
+    return (chr(max_char),count[max_char])
 
 if __name__ == '__main__':
     msg = 'Abrakadabra'
