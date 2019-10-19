@@ -12,9 +12,18 @@ def parse_input(input):
     :return: list of parsed list of integers
     :rtype: list
     """
-    pass
-
-
+    parse_string = []
+    #input = list(filter(lambda x: x != '\n',input))
+    input = input.split('\n')
+    input = list(filter(lambda x: x != '',input))
+    input = list(filter(lambda x: x != '    ',input))
+    input = list(filter(lambda x: x != ' ',input))
+    
+    input = list(map(lambda x: x.split(), input))
+    
+    list(map(lambda external:parse_string.append(list(map(lambda internal: int(internal),external))), input))
+    print(parse_string)
+    return parse_string
 if __name__ == '__main__':
     _input = """
 1 5

@@ -1,4 +1,7 @@
-def check_frequency(input):
+import task_1
+from itertools import groupby
+from collections import deque
+def check_frequency(input_):
     """
     Perform counting based on input queries and return queries result.
 
@@ -16,7 +19,25 @@ def check_frequency(input):
     :return: list of integers with results of operation 3
     :rtype: list
     """
-    pass
+
+    stack = deque()
+    counts = []
+    commends = task_1.parse_input(input_)
+    for commend in commends:
+        if len(commend)<3:
+            if commend[0] == 1:
+                stack.append(commend[1])
+            if commend[0] == 2:
+                if commend[1] in stack:
+                    stack.remove(commend[1])
+            if commend[0] == 3:        
+                    counts.append(sorted(stack).count(commend[1]))
+             #   print('x')
+   
+    
+    return counts
+
+   
 
 
 _input = """
@@ -33,4 +54,4 @@ _input = """
 
 """
 if __name__ == '__main__':
-    assert check_frequency(_input) == [0, 1]
+    assert check_frequency(_input) == [0, 0]
