@@ -35,7 +35,7 @@ def sort_dates(date_str, date_format=''):
     
     
     unsorted = list(map(lambda date: datetime.datetime.strptime(date,'%a %d %B %Y %H:%M:%S %z'),date_str))
-    unsorted = list(map(lambda date: date.replace(tzinfo=timezone.utc), unsorted))
+    #unsorted = list(map(lambda date: date.replace(tzinfo=timezone.utc), unsorted))
     #print(unsorted)
     sorted_ = sorted(unsorted,reverse = True)
     #print(sorted_)
@@ -94,12 +94,12 @@ if __name__ == '__main__':
         datetime.datetime(2015, 5, 1, 13, 54, 36, tzinfo=datetime.timezone.utc),
     ]
 
-    # assert parse_dates(dates) == """2015-05-10
-    # \t20:54:36
-    # \t13:54:36
-    # ----
-    # 2015-05-02
-    # \t14:24:36
-    # ----
-    # 2015-05-01
-    # \t13:54:36"""
+    assert parse_dates(dates) == """2015-05-10
+    \t20:54:36
+    \t13:54:36
+    ----
+    2015-05-02
+    \t14:24:36
+    ----
+    2015-05-01
+    \t13:54:36"""
