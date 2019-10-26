@@ -9,14 +9,26 @@ użyj wartość z pamięci kalkulatora. Obsłuż przypadki skrajne.
 
 
 class Calculator:
+
+  
+    global_memory = None
     def __init__(self):
+        
+        self.dect = {'+':self.sum,'/':self.div}
         self.memory = None
         # Podpowiedz: użyj atrybutu do przechowywania wyniku
         # ostatniej wykonanej operacji, tak by metoda memorize przypisywała
         # wynik zapisany w tym atrybucie
         self._short_memory = None
+    
+    
+    def div(self,val1,val2):
+        return val1/val2
+    
+    def sum(self,val1,val2):
+        return val1+val2
 
-    def run(self, operator, arg1, arg2):
+    def run(self, operator, arg1, arg2 = None):
         """
         Returns result of given operation.
 
@@ -29,11 +41,21 @@ class Calculator:
         :return: result of operation
         :rtype: float
         """
-        raise NotImplementedError
+        if arg2 is None:
+            arg2 = self.memory
+        if operator  in self.dect.keys():
+            self._short_memory = self.dect[operator](arg1,arg2)
+            self.memorize()
+
+            
+        return self.memory
+            
+        
+        
 
     def memorize(self):
-        """Saves last operation result to memory."""
-        raise NotImplementedError
+        self.memory = self._short_memory
+        Calculator.global_memory = self.memory
 
     def clean_memory(self):
         """Cleans memorized value"""
@@ -46,8 +68,10 @@ class Calculator:
 
 if __name__ == '__main__':
     calc = Calculator()
+    
     b = calc.run('+', 1, 2)
     calc.memorize()
     calc.in_memory()
-    c = calc.run('/', 9)
+    c = calc.run('/', 9) # 9 przez  pamięć
+    print(c)
     assert c == 3
