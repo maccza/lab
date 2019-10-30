@@ -15,9 +15,20 @@ class Vector:
     dim = None  # Wymiar vectora
     def __init__(self, *args):
         dim = len(args)
+        
         self.var = (args)
         
-
+    @property
+    def len(self):
+        temp = 0
+        for val in self.var:
+            temp += val**2
+            
+        temp = math.sqrt(temp)
+        return temp
+    @property
+    def dim(self):
+        return len(self.var)
     def __eq__(self,vector):
         if self.var == vector.var:
             return True
@@ -51,12 +62,6 @@ class Vector:
             
             return int(sum(temp))
     def __len__(self):
-        # temp = 0
-        # for val in self.var:
-        #     temp += val**2
-            
-        # temp = math.sqrt(temp)
-        
         return len(self.var)
     @staticmethod
     def calculate_vector(beg, end):
@@ -107,5 +112,7 @@ if __name__ == '__main__':
     assert v1 * 2 == Vector(2,4,6)
     assert v1 * v2 == 14
     assert len(Vector(3,4)) == 2
+    assert Vector(3,4).dim == 2
+    assert Vector(3,4).len == 5.    
     assert Vector.calculate_vector([0, 0, 0], [1,2,3]) == (1,2,3)
     assert Vector.from_points([0, 0, 0], [1,2,3]) == Vector(1,2,3)
