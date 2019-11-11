@@ -8,21 +8,30 @@ jak i operację z argumentem domyślnym) - EmptyMemory
 - dzielenie przez zero jest przekształcane w CalculatorError
 """
 from operator import add, mul, sub, truediv
-
+import numbers
 
 class CalculatorError(Exception):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.__cause__= ZeroDivisionError.__cause__
+    
+
+class WrongOperation(CalculatorError):
+    def __init__(self, *args, **kwargs):
+        print("błędna operacja")
     pass
 
 
-class WrongOperation(Exception):
+class NotNumberArgument(CalculatorError):
+    def __init__(self, *args, **kwargs):
+        print("argument nie jest liczbą")
+        print(self.__cause__)
     pass
 
 
-class NotNumberArgument(Exception):
-    pass
-
-
-class EmptyMemory(Exception):
+class EmptyMemory(CalculatorError):
+    def __init__(self, *args, **kwargs):
+        print("pusta pamięć")
     pass
 
 
@@ -53,13 +62,28 @@ class Calculator:
         """
         if operator in self.operations:
             arg2 = arg2 or self.memory
+            if arg2 is None:
+                raise EmptyMemory
             if arg2:
-                self._short_memory = self.operations[operator](arg1, arg2)
-                return self._short_memory
+                if isinstance(arg2,numbers.Number) and isinstance(arg1,numbers.Number):
+                    if operator != '/' and arg2 != 0:
+                        self._short_memory = self.operations[operator](arg1, arg2)
+                        return self._short_memory
+                    else:
+                        raise CalculatorError
+                else:
+                    raise NotNumberArgument
+            else:
+                raise CalculatorError
+        else: 
+            raise WrongOperation
 
     @property
     def memory(self):
-        return self._memory
+        if self._memory is not None:
+            return self._memory
+        else:
+            raise EmptyMemory
 
     def memorize(self):
         """Saves last operation result to memory."""
@@ -77,7 +101,7 @@ class Calculator:
 if __name__ == '__main__':
     b = None
     calc = Calculator()
-
+    
     try:
         b = calc.run('+', 1, 'a')
     except CalculatorError as exc:
@@ -107,8 +131,10 @@ if __name__ == '__main__':
 
     try:
         b = calc.run('/', 1, 0)
+        
     except CalculatorError as exc:
         assert type(exc.__cause__) == ZeroDivisionError
         assert b is None
+        
     else:
         raise AssertionError
