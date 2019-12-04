@@ -23,8 +23,18 @@ def calculate_neighbours(board):
     :type board: np.ndarray
     :param periodic
     """
-    pass
+    neighbours = np.zeros(shape=board.shape)
+    neighbours[:,:-1] += board[:,1:]
+    neighbours[:,1:] += board[:,:-1]
+    neighbours[1:,:] += board[:-1,:]
+    neighbours[:-1,:] += board[1:,:]
+    neighbours[:-1,:-1] += board[1:,1:]
+    neighbours[1:,1:] += board[:-1,:-1]
+    neighbours[:-1,1:] += board[1:,:-1]
+    neighbours[1:,:-1] += board[:-1,1:]
 
+    
+    return neighbours
 
 def iterate(board):
     """
@@ -44,8 +54,14 @@ def iterate(board):
     :return: next board state
     :rtype: np.ndarray
     """
-    pass
+    neighbours = calculate_neighbours(board)
+    
+    condition_2 = (np.logical_and(board == False,neighbours == 3))
 
+    condition_3 = (np.logical_and(board == True,np.logical_or(neighbours == 2,neighbours == 3)))
+
+ 
+    return condition_2 | condition_3
 
 if __name__ == '__main__':
     _board = np.array([
